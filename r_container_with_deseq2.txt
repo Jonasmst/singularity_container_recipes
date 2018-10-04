@@ -1,0 +1,51 @@
+BootStrap: debootstrap
+OSVersion: xenial
+MirrorURL: http://archive.ubuntu.com/ubuntu/
+
+%post
+    sed -i 's/main/main restricted universe/g' /etc/apt/sources.list
+    apt-get update
+
+    # Install R, Python, misc. utilities
+    # Add updated R repo
+    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+    # Add software-properties-common to be able to use add-apt-repository
+    apt-get install -y software-properties-common
+    apt-get install -y apt-transport-https
+
+    add-apt-repository 'deb [arch=amd64,i386] https://cran.rstudio.com/bin/linux/ubuntu xenial/'
+    apt-get update
+    apt-get install -y r-base
+    apt-get install -y libopenblas-dev r-base-core libcurl4-openssl-dev libopenmpi-dev openmpi-bin openmpi-common openmpi-doc openssh-client openssh-server libssh-dev wget vim git nano git cmake  gfortran g++ curl wget python autoconf bzip2 libtool libtool-bin python-pip python-dev
+    apt-get install -y libxml2-dev
+    apt-get install -y r-cran-rmysql
+    #apt-get install -y build-essential
+    #apt-get install -y g++
+    #apt-get update -y
+    #apt-get upgrade -y
+
+    apt-get clean
+    locale-gen en_US.UTF-8
+
+    echo 'source("https://bioconductor.org/biocLite.R")' > r_install.R
+	echo 'r = getOption("repos")' >> r_install.R
+	echo 'r["CRAN"] = "http://cran.us.r-project.org"' >> r_install.R
+	echo 'options(repos = r)' >> r_install.R
+    echo 'biocLite("GenomicFeatures")' >> r_install.R
+    echo 'biocLite("DESeq2")' >> r_install.R
+    echo 'biocLite("GenomicAlignments")' >> r_install.R
+    echo 'biocLite("GenomicFeatures")' >> r_install.R
+    echo 'biocLite("Rsamtools")' >> r_install.R
+    echo 'biocLite("parathyroidSE")' >> r_install.R
+    echo 'biocLite("Rsubread")' >> r_install.R
+    echo 'biocLite("genefilter")' >> r_install.R
+    echo 'install.packages("gplots")' >> r_install.R
+    echo 'install.packages("RColorBrewer")' >> r_install.R
+    echo 'biocLite("biomaRt")' >> r_install.R
+
+    # Install required R packages
+    R --vanilla --slave < r_install.R
+
+    mkdir /cluster /work /usit /tsd /net /projects
+
+%runscript
