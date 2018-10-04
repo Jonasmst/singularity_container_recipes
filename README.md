@@ -125,8 +125,8 @@ The following object is masked from 'package:base':
 ```
 
 ## Container descriptions
-### python\_container\_with\_rseqc.txt
+### [python\_container\_with\_rseqc.txt](https://github.com/Jonasmst/singularity_container_recipes/blob/master/python_container_with_rseqc.txt)
 This container contains a python2 runtime with RSeQC and all its dependencies, in addition to some frequently used libraries in data science, such as numpy, pandas and matplotlib. Check out the recipe for a complete list of packages.
 
-### r\_container\_with\_deseq2.txt
+### [r\_container\_with\_deseq2.txt](https://github.com/Jonasmst/singularity_container_recipes/blob/master/r_container_with_deseq2.txt)
 This container contains an R 3.4.4 runtime with DESeq2 and all its dependencies. Check out the recipe for a complete list of packages installed.
