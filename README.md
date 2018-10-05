@@ -9,6 +9,7 @@ This container contains a python2 runtime with RSeQC and all its dependencies, i
 ### [r\_container\_with\_deseq2.txt](https://github.com/Jonasmst/singularity_container_recipes/blob/master/r_container_with_deseq2.txt)
 This container contains an R 3.4.4 runtime with DESeq2 and all its dependencies. Check out the recipe for a complete list of packages installed.
 
+#### Setting library paths to avoid errors when loading R packages.
 _Note_: You may have to set the R library-path to avoid errors with R trying to read packages from the host file system. Use something like:
 
 `singularity exec r_container.simg find / -iname "*deseq2*"`
