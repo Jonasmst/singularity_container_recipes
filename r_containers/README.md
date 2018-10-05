@@ -45,6 +45,7 @@ The `MA_plot.pdf` can now be found in the `my_directory` directory.
 
 The shared directory can also be used to provide input files from the host system to the container, e.g. R-scripts that are to be
 run within the container. Simply copy your scripts to the `my_directory` directory and access them from the `/mnt` directory:
+
 `singularity exec -B my_directory:/mnt/ r_container.simg R --vanilla < /mnt/r_script.R`
 
 ### Running the container
