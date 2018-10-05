@@ -35,10 +35,6 @@ Here, `:` delimits two paths, and `my_directory` is the directory in the host sy
 and `/mnt` is the directory within the container (`2)`). When we run scripts inside the container, we can write output files to the `/mnt` directory,
 and then access these files later in the `my_directory` directory. E.g. saving a plot from an R-script:
 
-The shared directory can also be used to provide input files from the host system to the container, e.g. R-scripts that are to be
-run within the container. Simply copy your scripts to the `my_directory` directory and access them from the `/mnt` directory:
-`singularity exec -B my_directory:/mnt/ r_container.simg R --vanilla < /mnt/r_script.R`
-
 ```
 # Save plot to the /mnt/ directory
 pdf("/mnt/MA_plot.pdf")
@@ -46,6 +42,10 @@ plotMA(some_variable)
 dev.off()
 ```
 The `MA_plot.pdf` can now be found in the `my_directory` directory.
+
+The shared directory can also be used to provide input files from the host system to the container, e.g. R-scripts that are to be
+run within the container. Simply copy your scripts to the `my_directory` directory and access them from the `/mnt` directory:
+`singularity exec -B my_directory:/mnt/ r_container.simg R --vanilla < /mnt/r_script.R`
 
 ### Running the container
 On [TSD](https://www.uio.no/english/services/it/research/sensitive-data/index.html), we're not allowed to run singularity outside of SLURM. If you try, you'll see an error message along the lines of:
