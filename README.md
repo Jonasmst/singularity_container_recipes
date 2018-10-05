@@ -19,6 +19,31 @@ to find where R-packages were installed inside the container. Then set the libra
 
 Now, R should look for packages in `/usr/local/lib/R/site-library`, rather than whatever is the default path in the host system.
 
+
+#### Mapping file systems
+Singularity containers by design do not share a file system with its host system. This means that output files created when running a container stays within the container, inaccsessible to the host system from which the container is run.
+In order to access files created within the container, we can bind paths from outside the container to the inside of the container, essentially specifying
+a directory that links the outside to the inside, similar to how services like Dropbox works, where the same directory can be accessed from two different
+computers. We need two paths:
+1) Path to the directory in the host system, i.e. "outside" of the container.
+2) Path to the directory in the container.
+
+When running the container, we can then save files to the directory specified in `2)`, and later access them from the host system
+in the directory specified in `1)`. To do this, we use the `-B` flag when running our container:
+
+`singularity exec -B my_directory:/mnt`
+
+Here, `:` delimits two paths, and `my_directory` is the directory in the host system (`1)`, the one we have access to outside of the container),
+and `/mnt` is the directory within the container (`2)`). When we run scripts inside the container, we can write output files to the `/mnt` directory,
+and then access these files later in the `my_directory` directory. E.g. saving a plot from an R-script:
+```
+# Save plot to the /mnt/ directory
+pdf("/mnt/MA_plot.pdf")
+plotMA(some_variable)
+dev.off()
+```
+The `MA_plot.pdf` can now be found in the `my_directory` directory.
+
 ## Building containers
 Building singularity containers requires 
 1. A working singularity installation. I use a vagrant VM on macOS.
