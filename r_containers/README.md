@@ -133,3 +133,29 @@ outfile <- file("/mnt/output.txt")
 writeLines(c("Hello", "World"), outfile)
 close(outfile)
 ```
+
+#### Conclusion
+It seems that arguments provided in the SLURM-script when executing the container (e.g. the `my_r_script.R` script) is interpreted in the scope
+outside of the container, i.e. in the host file system, while everything within `my_r_script.R` is done in the scope inside the container. This
+comes with the following caveat:
+
+If you specify paths as input arguments to your R-script, e.g.:
+
+`singularity exec -B shared_directory/:/mnt/ r_container.simg R --vanilla < shared_directory/my_r_script.R --args output_file.txt`
+
+the `output_file.txt` path must be prepended with a path within the scope of the container. E.g.:
+
+`singularity exec -B shared_directory/:/mnt/ r_container.simg R --vanilla < shared_directory/my_r_script.R --args /mnt/output_file.txt`
+
+Specifying a path within the scope of the host system won't work. E.g.:
+
+`singularity exec -B shared_directory/:/mnt/ r_container.simg R --vanilla < shared_directory/my_r_script.R --args shared_directory/output_file.txt`
+
+and will give you an error saying that there's no such file or directory. The reason is that when the `my_r_script.R` reads the input argument
+(the path to `output_file.txt`), the script is within the container, and can only relate to paths within the container's scope.
+
+The same applies with input files. If you're passing the path to e.g. a BAM file to the R-script, the paths must be prepended by the `/mnt/` path,
+and will then be able to read files from the `shared_directory/` directory.
+
+Hope this makes sense.
+
