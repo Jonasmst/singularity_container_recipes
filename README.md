@@ -9,6 +9,16 @@ This container contains a python2 runtime with RSeQC and all its dependencies, i
 ### [r\_container\_with\_deseq2.txt](https://github.com/Jonasmst/singularity_container_recipes/blob/master/r_container_with_deseq2.txt)
 This container contains an R 3.4.4 runtime with DESeq2 and all its dependencies. Check out the recipe for a complete list of packages installed.
 
+_Note_: You may have to set the R library-path to avoid errors with R trying to read packages from the host file system. Use something like:
+
+`singularity exec r_container.simg find / -iname "*deseq2*"`
+
+to find where R-packages were installed inside the container. Then set the library-path to this directory in the beginning of R-scripts run within the container by:
+
+`.libPaths("/usr/local/lib/R/site-library")`
+
+Now, R should look for packages in `/usr/local/lib/R/site-library`, rather than whatever is the default path in the host system.
+
 ## Building containers
 Building singularity containers requires 
 1. A working singularity installation. I use a vagrant VM on macOS.
