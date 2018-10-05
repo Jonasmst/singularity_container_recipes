@@ -98,8 +98,38 @@ shared_directory="/cluster/projects/p19/Projects/CRC-RNA-SEQ/deseq2"
 
 ## Run container
 echo "Running container"
-singularity exec -B $shared_directory:/mnt $container R --vanilla < /mnt/my_r_script.R
+singularity exec -B $shared_directory:/mnt $container R --vanilla < my_r_script.R
 ```
-Here, `my_r_script.R` is located within the directory from which the job is submitted, i.e. in the `$shared_directory` directory. So it is mapped
-from outside the container to the inside of the container (as done with the `-B` flag, see above). The very last line of the SLURM-script
-runs the container and asks it to execute the R-script. The R-script could be anything, e.g. a simple hello-world program, or the entire DESeq2 pipeline.
+Here, `my_r_script.R` is located within the directory from which the job is submitted, i.e. in the `$shared_directory` directory.
+The very last line of the SLURM-script runs the container and asks it to execute the R-script. The R-script could be anything, e.g.
+a simple hello-world program, or the entire DESeq2 pipeline.
+
+I've made some observations related to mapping.
+#### When specifying the input file to be run in the SLURM-file, we don't need to use mapped paths.
+For instance, in the script above, we're executing `my_r_script.R`, which is the path to the script outside of the container. If we try
+to read it from the mapped directory inside the container, i.e. `/mnt/`, we get an error saying there's no such file. E.g., we can't do
+
+`singularity exec -B shared_directory/:/mnt/ r_container.simg R --vanilla < /mnt/my_r_script.R`
+
+we must do
+
+`singularity exec -B shared_directory/:/mnt/ r_container.simg R --vanilla < shared_directory/my_r_script.R`
+
+#### Input and output files handled within the container, must reside in the mapped directory.
+When reading input files or writing output files from processes within the container, e.g. in the `my_r_script.R`, script
+(which is run inside the container), we need to use the path of the mapped directory (i.e. `/mnt/`). E.g. inside `my_r_script.R`,
+we cant do
+
+```
+outfile <- file("/shared_directory/output.txt")
+writeLines(c("Hello", "World"), outfile)
+close(outfile)
+```
+
+we must do
+
+```
+outfile <- file("/mnt/output.txt")
+writeLines(c("Hello", "World"), outfile)
+close(outfile)
+```
