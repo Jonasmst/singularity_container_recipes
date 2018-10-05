@@ -18,7 +18,7 @@ to find where R-packages were installed inside the container. Then set the libra
 Now, R should look for packages in `/usr/local/lib/R/site-library`, rather than whatever is the default path in the host system.
 
 
-### Mapping file systems
+### Mapping file systems - Handling input and output files from outside the container
 Singularity containers by design do not share a file system with its host system. This means that output files created when running a container stays within the container, inaccessible to the host system from which the container is run.
 In order to access files created within the container, we can bind paths from outside the container to the inside of the container, essentially specifying
 a directory that links the outside to the inside, similar to how services like Dropbox works, where the same directory can be accessed from two different
