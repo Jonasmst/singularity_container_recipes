@@ -104,7 +104,7 @@ Here, `my_r_script.R` is located within the directory from which the job is subm
 The very last line of the SLURM-script runs the container and asks it to execute the R-script. The R-script could be anything, e.g.
 a simple hello-world program, or the entire DESeq2 pipeline.
 
-I've made some observations related to mapping.
+### Some observations related to mapping.
 #### When specifying the input file to be run in the SLURM-file, we don't need to use mapped paths.
 For instance, in the script above, we're executing `my_r_script.R`, which is the path to the script outside of the container. If we try
 to read it from the mapped directory inside the container, i.e. `/mnt/`, we get an error saying there's no such file. E.g., we can't do
@@ -118,10 +118,10 @@ we must do
 #### Input and output files handled within the container, must reside in the mapped directory.
 When reading input files or writing output files from processes within the container, e.g. in the `my_r_script.R`, script
 (which is run inside the container), we need to use the path of the mapped directory (i.e. `/mnt/`). E.g. inside `my_r_script.R`,
-we cant do
+we can't do
 
 ```
-outfile <- file("/shared_directory/output.txt")
+outfile <- file("shared_directory/output.txt")
 writeLines(c("Hello", "World"), outfile)
 close(outfile)
 ```
