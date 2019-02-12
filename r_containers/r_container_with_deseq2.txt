@@ -28,9 +28,13 @@ MirrorURL: http://archive.ubuntu.com/ubuntu/
     locale-gen en_US.UTF-8
 
     echo 'source("https://bioconductor.org/biocLite.R")' > r_install.R
-	echo 'r = getOption("repos")' >> r_install.R
-	echo 'r["CRAN"] = "http://cran.us.r-project.org"' >> r_install.R
-	echo 'options(repos = r)' >> r_install.R
+    echo 'r = getOption("repos")' >> r_install.R
+    echo 'r["CRAN"] = "http://cran.us.r-project.org"' >> r_install.R
+    echo 'options(repos = r)' >> r_install.R
+    echo 'install.packages("devtools")' >> r_install.R
+    echo 'library(devtools)' >> r_install.R
+    echo 'install_github("stephens999/ashr")' >> r_install.R
+    echo 'install.packages("pheatmap")' >> r_install.R
     echo 'biocLite("GenomicFeatures")' >> r_install.R
     echo 'biocLite("DESeq2")' >> r_install.R
     echo 'biocLite("GenomicAlignments")' >> r_install.R
@@ -42,10 +46,22 @@ MirrorURL: http://archive.ubuntu.com/ubuntu/
     echo 'install.packages("gplots")' >> r_install.R
     echo 'install.packages("RColorBrewer")' >> r_install.R
     echo 'biocLite("biomaRt")' >> r_install.R
+    echo 'biocLite("apeglm")' >> r_install.R
+    echo 'biocLite("IHW")' >> r_install.R
+    echo 'biocLite("pasilla")' >> r_install.R
+    echo 'biocLite("sva")' >> r_install.R
+    echo 'biocLite("RUVSeq")' >> r_install.R
+    echo 'biocLite("ReportingTools")' >> r_install.R
+    echo 'biocLite("Glimma")' >> r_install.R
+    echo 'biocLite("regionReport")' >> r_install.R
+    echo 'biocLite("vsn")' >> r_install.R
+    echo 'biocLite("pcaExplorer")' >> r_install.R
+    echo 'biocLite("edgeR")' >> r_install.R
+    echo 'biocLite("EventPointer")' >> r_install.R
 
     # Install required R packages
     R --vanilla --slave < r_install.R
 
-    mkdir /cluster /work /usit /tsd /net /projects
+    mkdir /cluster /work /usit /tsd /net /projects /shared_directory
 
 %runscript
